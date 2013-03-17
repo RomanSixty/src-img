@@ -1,9 +1,19 @@
 (function() {
-  var checkForRequire, libs, loadLibs, server, sourceImage;
+  var checkForRequire, libs, services, loadLibs, server, sourceImage;
 
   server = 'http://romansixty.github.com/src-img/';
 
-  libs = ['http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js', "" + server + "/js/lib/URI.js"];
+  libs = [
+    'http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js',
+    server + "/js/lib/URI.js"
+  ];
+
+  // image search services, %s is the encoded URL of the image to find
+  services = {
+    Google: 'http://images.google.com/searchbyimage?image_url=%s',
+    TinEye: 'http://tineye.com/search?pluginver=bookmark_1.0&url=%s',
+    IQDB:   'http://iqdb.org/?url=%s'
+  }
 
   sourceImage = {
     exit: function(e) {
@@ -17,32 +27,46 @@
       $style = $('<link>');
       $style.attr({
         rel: 'stylesheet',
-        href: "" + server + "/css/bookmarklet.css",
+        href: server + "/css/bookmarklet.css",
         type: 'text/css'
       });
       $('head').append($style);
       count = 0;
       flickrHost = /flickr.com/i.test(window.location.hostname);
       $.each($('img'), function(index, img) {
-        var $img, flickrID, searchUrl, src;
+        var $img, flickrID, searchUrl, src,
+          servicelinks = [];
         $img = $(img);
         if ($img.height() < 100 || $img.width() < 100) return;
         count++;
         src = $img.attr('src');
         if (src.indexOf('http' < 0)) src = absolutizeURI(window.location, src);
+
+        // if it's an image from Flickr, we show its original position
         flickrID = /static.?flickr.com\/([0-9]*)\/([0-9]*)/i.exec(src);
         if (flickrID && !flickrHost) {
-          searchUrl = "http://www.flickr.com/photo.gne?id=" + flickrID[2];
-        } else {
-          searchUrl = "http://images.google.com/searchbyimage?image_url=" + (escape(src)) + "&image_content=&bih=" + ($img.height()) + "&biw=" + ($img.width());
+          servicelinks.push('<a href="http://www.flickr.com/photo.gne?id=' + flickrID[2] + '" target="_blank">Flickr</a>');
         }
-        $('body').append("      <a class=\"src-img\" style=\"width:" + ($img.width()) + "px;height:" + ($img.height()) + "px;top:" + ($img.offset().top) + "px;left:" + ($img.offset().left) + "px;\" href=\"" + searchUrl + "\" target=\"_blank\"><span>&#63;&iquest;</span></a>      ");
+        for (var i in services) {
+          servicelinks.push('<a href="' + services[i].replace(/%s/, escape(src)) + '" target="_blank">' + i + '</a>');
+        }
+
+        // append src-img box
+        servicelinks = servicelinks.join(' ');
+        $('body').append('<span class="src-img" style="width:'  + ($img.width())  + 'px;' +
+                                                      'height:' + ($img.height()) + 'px;' +
+                                                      'top:'    + ($img.offset().top)  + 'px;' +
+                                                      'left:'   + ($img.offset().left) + 'px;">' +
+        '<span>&#63;&iquest;<br/>' +
+        servicelinks +
+        '</span>' +
+        '</span>');
       });
       if (count === 0) {
         alert('I couldn\'t find any images :(');
         return;
       }
-      close = $("<a href=\"#\" class=\"src-img-close\">&times;</a>");
+      close = $('<a href="#" class="src-img-close">&times;</a>');
       $('body').append(close);
       $(close).bind('click', this.exit);
     }
