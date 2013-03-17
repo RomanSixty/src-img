@@ -17,7 +17,7 @@
 
   sourceImage = {
     exit: function(e) {
-      $('a.src-img').remove();
+      $('span.src-img').remove();
       $('a.src-img-close').remove();
       e.preventDefault();
     },
@@ -66,9 +66,8 @@
         alert('I couldn\'t find any images :(');
         return;
       }
-      close = $('<a href="#" class="src-img-close">&times;</a>');
+      close = $('<a href="#" class="src-img-close">&times;</a>').bind('click', _this.exit);
       $('body').append(close);
-      $(close).bind('click', this.exit);
     }
   };
 

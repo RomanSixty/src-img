@@ -42,6 +42,7 @@ a.src-img-close {
 	right: 0px;
 	top: 0px;
 	z-index: 9999;
+	width: 30px;
 	height: 30px;
 	line-height: 26px;
 	text-align: center !important;
