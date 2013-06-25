@@ -10,6 +10,7 @@ span.src-img {
 span.src-img span {
 	font-family: 'Helvetica Neue', Sans-Serif !important;
 	font-weight: 500 !important;
+	line-height: 30px !important;
 	display: block !important;
 	width: 100px !important;
 	height: 100px !important;
@@ -30,13 +31,20 @@ span.src-img span a {
 	font-size: 14px !important;
 	color: inherit !important;
 	letter-spacing: 0 !important;
+	line-height: 20px !important;
+	text-decoration: none !important;
 }
 span.src-img:hover span {
 	background: rgba(0,0,0,.5) !important;
+	color: #FFF !important;
 }
 span.src-img:hover span a {
-	color: #FFF !important;
-	background: inherit !important;
+	color: inherit !important;
+	background: transparent !important;
+}
+
+span.src-img span a:hover {
+	text-decoration: underline !important;
 }
 
 a.src-img-close {
