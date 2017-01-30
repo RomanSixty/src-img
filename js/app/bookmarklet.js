@@ -1,7 +1,7 @@
 (function() {
   var checkForRequire, libs, services, loadLibs, server, sourceImage;
 
-  server = '//romansixty.github.com/src-img/';
+  server = '//romansixty.github.io/src-img';
 
   libs = [
     '//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js',
